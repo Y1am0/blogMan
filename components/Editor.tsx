@@ -38,26 +38,21 @@ export default function Editor() {
   const formRef = useRef<HTMLFormElement>(null)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [activeTab, setActiveTab] = useState('visual')
+  const [featuredImage, setFeaturedImage] = useState('')
 
   const handlePreview = () => {
     setIsPreviewOpen(true)
+  }
+
+  const handleImageUpload = (imageUrl: string) => {
+    setFeaturedImage(imageUrl)
   }
 
   return (
     <>
       <form 
         ref={formRef} 
-        action={(formData: FormData) => {
-          if (isSlugLocked) {
-            formData.set('slug', slug);
-          }
-          formData.set('publishDate', publishDate?.toISOString() || new Date().toISOString());
-          formData.set('tags', JSON.stringify(tags));
-          formData.set('keywords', JSON.stringify(keywords));
-          formData.set('metaDescription', metaDescription || excerpt);
-          formData.set('excerpt', excerpt);
-          return formAction(formData);
-        }} 
+        action={formAction}
         className="flex flex-col w-full h-full space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4"
       >
         <div className="lg:w-2/3 space-y-4">
@@ -70,7 +65,7 @@ export default function Editor() {
             handleSlugChange={handleSlugChange}
             toggleSlugLock={toggleSlugLock}
             handleSlugBlur={handleSlugBlur}
-            titleError={state.errors?.title?.[0]}
+            titleError={state?.errors?.title?.[0]}
           />
           <ContentEditor
             content={content}
@@ -86,7 +81,7 @@ export default function Editor() {
               }
             }}
           />
-          {state.errors && state.errors.content && (
+          {state?.errors?.content && (
             <p className={`text-error text-sm mt-1`}>{state.errors.content[0]}</p>
           )}
           <div className="space-y-4">
@@ -108,9 +103,10 @@ export default function Editor() {
           keywords={keywords}
           setKeywords={setKeywords}
           handlePreview={handlePreview}
+          handleImageUpload={handleImageUpload}
         />
       </form>
-      {state.message && (
+      {state?.message && (
         <p className={`mt-4 p-4 rounded-md ${
           state.errors && Object.keys(state.errors).length > 0
             ? `border border-error bg-error/10 text-error`

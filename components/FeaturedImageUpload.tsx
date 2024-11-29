@@ -3,15 +3,38 @@
 import React, { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
-import { ImageUp, X } from 'lucide-react'
+import { ImageUp, X, FolderOpen } from 'lucide-react'
+import { uploadFile } from '@/lib/github'
+import { Button } from "@/components/ui/button"
+import ImageSelectionModal from './ImageSelectionModal'
 
-const FeaturedImageUpload: React.FC = () => {
+interface FeaturedImageUploadProps {
+  onImageUpload: (imageUrl: string) => void;
+}
+
+const FeaturedImageUpload: React.FC<FeaturedImageUploadProps> = ({ onImageUpload }) => {
   const [image, setImage] = useState<string | null>(null)
+  const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [isSelectionModalOpen, setIsSelectionModalOpen] = useState(false)
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0]
-    setImage(URL.createObjectURL(file))
-  }, [])
+    setUploadStatus('uploading')
+    setErrorMessage(null)
+
+    const path = `uploads/${Date.now()}-${file.name}`
+    const imageUrl = await uploadFile(file, path)
+
+    if (imageUrl) {
+      setImage(imageUrl)
+      setUploadStatus('success')
+      onImageUpload(imageUrl)
+    } else {
+      setUploadStatus('error')
+      setErrorMessage('Failed to upload image. Please try again.')
+    }
+  }, [onImageUpload])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -21,6 +44,16 @@ const FeaturedImageUpload: React.FC = () => {
 
   const removeImage = () => {
     setImage(null)
+    setUploadStatus('idle')
+    setErrorMessage(null)
+    onImageUpload('')
+  }
+
+  const handleSelectImage = (imageUrl: string) => {
+    setImage(imageUrl)
+    setUploadStatus('success')
+    onImageUpload(imageUrl)
+    setIsSelectionModalOpen(false)
   }
 
   return (
@@ -49,6 +82,28 @@ const FeaturedImageUpload: React.FC = () => {
           </div>
         )}
       </div>
+      {uploadStatus === 'uploading' && (
+        <p className={`text-text-muted mt-2`}>Uploading image...</p>
+      )}
+      {uploadStatus === 'success' && (
+        <p className={`text-success mt-2`}>Image uploaded successfully!</p>
+      )}
+      {uploadStatus === 'error' && errorMessage && (
+        <p className={`text-error mt-2`}>{errorMessage}</p>
+      )}
+      <Button
+        onClick={() => setIsSelectionModalOpen(true)}
+        className="mt-4 w-full"
+        variant="outline"
+      >
+        <FolderOpen className="mr-2 h-4 w-4" />
+        Choose from uploaded images
+      </Button>
+      <ImageSelectionModal
+        isOpen={isSelectionModalOpen}
+        onClose={() => setIsSelectionModalOpen(false)}
+        onSelectImage={handleSelectImage}
+      />
     </div>
   )
 }

@@ -11,6 +11,7 @@ export const formSchema = z.object({
   keywords: z.array(z.string()),
   metaDescription: z.string().max(160, { message: 'Meta description should not exceed 160 characters' }),
   excerpt: z.string().min(1, { message: 'Excerpt is required' }).max(120, { message: 'Excerpt should not exceed 120 characters' }),
+  featuredImage: z.string().url({ message: 'Featured image must be a valid URL' }).optional(),
 });
 
 export type FormValues = z.infer<typeof formSchema>;
