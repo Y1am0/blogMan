@@ -3,25 +3,140 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-primary: #FAFF00;
+  --color-primary-dark: #CCCC00;
+  --color-background: #333333;
+  --color-background-dark: #1a1a1a;
+  --color-background-darkest: #0c0c0c;
+  --color-text: #FFFFFF;
+  --color-text-muted: #808080;
+  --color-border: rgba(250, 255, 0, 0.2);
+  --color-error: #FF0000;
+  --color-success: #00FF00;
+  --color-warning: #FFA500;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    @apply bg-[#333333] text-white;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* Update the existing styles to use these variables */
+input[type="range"]::-webkit-slider-thumb {
+  background: var(--color-primary);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+input[type="range"]::-moz-range-thumb {
+  background: var(--color-primary);
+}
+
+button:focus, button:focus-visible {
+  @apply outline-none ring-0;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: #FFFFFF50;
+  font-size: 14px;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror blockquote {
+  @apply border-l-4 border-[rgba(250,255,0,0.2)] pl-4 italic text-gray-300;
+}
+
+.ProseMirror ul {
+  @apply list-disc pl-5 text-white;
+}
+
+.ProseMirror ol {
+  @apply list-decimal pl-5 text-white;
+}
+
+.ProseMirror pre {
+  @apply bg-gray-800 rounded-md p-4 text-gray-200 w-fit;
+}
+
+.ProseMirror code {
+  @apply bg-gray-700 rounded px-1 py-0.5 text-gray-200;
+}
+
+.ProseMirror h1 {
+  @apply text-3xl font-bold;
+}
+
+.ProseMirror h2 {
+  @apply text-2xl font-bold;
+}
+
+.ProseMirror h3 {
+  @apply text-xl font-bold;
+}
+
+.ProseMirror h4 {
+  @apply text-lg font-bold;
+}
+
+.ProseMirror h5 {
+  @apply text-sm font-bold;
+}
+
+.ProseMirror h6 {
+  @apply text-xs font-bold;
+}
+
+/* Code block styles */
+.hljs-comment,
+.hljs-quote {
+  color: #616161;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-attribute,
+.hljs-tag,
+.hljs-name,
+.hljs-regexp,
+.hljs-link,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+  color: #f98181;
+}
+
+.hljs-number,
+.hljs-meta,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params {
+  color: #fbbc88;
+}
+
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet {
+  color: #b9f18d;
+}
+
+.hljs-title,
+.hljs-section {
+  color: #faf594;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #70cff8;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: 700;
 }
