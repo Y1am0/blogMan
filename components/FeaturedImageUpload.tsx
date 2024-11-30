@@ -24,16 +24,23 @@ const FeaturedImageUpload: React.FC<FeaturedImageUploadProps> = ({ onImageUpload
     setErrorMessage(null)
 
     const path = `uploads/${Date.now()}-${file.name}`
-    const imageUrl = await uploadFile(file, path)
+    const reader = new FileReader()
+    
+    reader.onload = async (event) => {
+      const base64String = event.target?.result as string
+      const imageUrl = await uploadFile(base64String, path, file.type)
 
-    if (imageUrl) {
-      setImage(imageUrl)
-      setUploadStatus('success')
-      onImageUpload(imageUrl)
-    } else {
-      setUploadStatus('error')
-      setErrorMessage('Failed to upload image. Please try again.')
+      if (imageUrl) {
+        setImage(imageUrl)
+        setUploadStatus('success')
+        onImageUpload(imageUrl)
+      } else {
+        setUploadStatus('error')
+        setErrorMessage('Failed to upload image. Please try again.')
+      }
     }
+
+    reader.readAsDataURL(file)
   }, [onImageUpload])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -92,7 +99,11 @@ const FeaturedImageUpload: React.FC<FeaturedImageUploadProps> = ({ onImageUpload
         <p className={`text-error mt-2`}>{errorMessage}</p>
       )}
       <Button
-        onClick={() => setIsSelectionModalOpen(true)}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsSelectionModalOpen(true);
+        }}
         className="mt-4 w-full"
         variant="outline"
       >

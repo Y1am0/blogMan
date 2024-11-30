@@ -1,3 +1,5 @@
+'use server'
+
 import { Octokit } from "@octokit/rest";
 
 const octokit = new Octokit({
@@ -40,17 +42,17 @@ export async function createOrUpdateFile(path: string, content: string, message:
   }
 }
 
-export async function uploadFile(file: File, path: string): Promise<string | null> {
+export async function uploadFile(base64String: string, path: string, mimeType: string): Promise<string | null> {
   try {
-    const content = await file.arrayBuffer();
-    const message = `Upload file: ${file.name}`;
+    const content = base64String.split(',')[1]; // Remove the data:image/xxx;base64, part
+    const message = `Upload file: ${path}`;
 
     await octokit.repos.createOrUpdateFileContents({
       owner,
       repo,
       path,
       message,
-      content: Buffer.from(content).toString('base64'),
+      content,
       branch,
     });
 
