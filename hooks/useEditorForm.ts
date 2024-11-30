@@ -37,6 +37,7 @@ export function useEditorForm() {
   const [keywords, setKeywords] = useState<string[]>([])
   const [metaDescription, setMetaDescription] = useState('')
   const [excerpt, setExcerpt] = useState('')
+  const [featuredImage, setFeaturedImage] = useState('')
 
   useEffect(() => {
     if (isSlugLocked) {
@@ -71,6 +72,21 @@ export function useEditorForm() {
     setSlug(slugify(slug))
   }
 
+  const handleSubmit = async () => {
+    const formData = {
+      title,
+      slug,
+      content,
+      publishDate: publishDate ? publishDate.toISOString() : '',
+      tags,
+      keywords,
+      metaDescription,
+      excerpt,
+      featuredImage
+    };
+    return formAction(formData);
+  };
+
   return {
     state,
     formAction,
@@ -97,6 +113,9 @@ export function useEditorForm() {
     handleSlugChange,
     toggleSlugLock,
     handleSlugBlur,
+    handleSubmit,
+    featuredImage,
+    setFeaturedImage
   }
 }
 

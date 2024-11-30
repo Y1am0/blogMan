@@ -14,7 +14,7 @@ export default function Home() {
       <Editor />
       <Button
         onClick={() => setIsHowToUseOpen(true)}
-        className={`fixed bottom-4 right-4 bg-primary text-background hover:bg-primary-dark transition-colors duration-200`}
+        className={`fixed bottom-4 border border-border right-4 bg-primary/5 text-text hover:text-background-darkest hover:bg-primary-dark transition-colors duration-200`}
       >
         <HelpCircle className="w-5 h-5 mr-2" />
         How to Use

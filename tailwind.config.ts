@@ -6,7 +6,7 @@ module.exports = {
 	  './components/**/*.{ts,tsx}',
 	  './app/**/*.{ts,tsx}',
 	  './src/**/*.{ts,tsx}',
-	  ],
+	],
 	theme: {
 	  container: {
 		center: true,
@@ -17,17 +17,23 @@ module.exports = {
 	  },
 	  extend: {
 		colors: {
-		  primary: 'var(--color-primary)',
-		  'primary-dark': 'var(--color-primary-dark)',
-		  background: 'var(--color-background)',
-		  'background-dark': 'var(--color-background-dark)',
-		  'background-darkest': 'var(--color-background-darkest)',
-		  text: 'var(--color-text)',
-		  'text-muted': 'var(--color-text-muted)',
-		  border: 'var(--color-border)',
-		  error: 'var(--color-error)',
-		  success: 'var(--color-success)',
-		  warning: 'var(--color-warning)',
+		  primary: {
+			DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
+			dark: 'rgb(var(--color-primary-dark) / <alpha-value>)',
+		  },
+		  background: {
+			DEFAULT: 'rgb(var(--color-background) / <alpha-value>)',
+			dark: 'rgb(var(--color-background-dark) / <alpha-value>)',
+			darkest: 'rgb(var(--color-background-darkest) / <alpha-value>)',
+		  },
+		  text: {
+			DEFAULT: 'rgb(var(--color-text) / <alpha-value>)',
+			muted: 'rgb(var(--color-text-muted) / <alpha-value>)',
+		  },
+		  border: 'rgb(var(--color-border) / <alpha-value>)',
+		  error: 'rgb(var(--color-error) / <alpha-value>)',
+		  success: 'rgb(var(--color-success) / <alpha-value>)',
+		  warning: 'rgb(var(--color-warning) / <alpha-value>)',
 		},
 		keyframes: {
 		  "accordion-down": {
