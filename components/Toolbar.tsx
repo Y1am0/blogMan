@@ -193,7 +193,7 @@ export const Toolbar = ({ editor, isImageSelected, isVideoSelected }: Props) => 
   };
 
   return (
-    <div className={`border border-border bg-background rounded-md p-2 flex flex-col transition-all duration-300 ease-in-out`}>
+    <div className={`border border-border/20 bg-background rounded-md p-2 flex flex-col transition-all`}>
       <div className="flex flex-wrap gap-1 items-center [&>button]:p-2">
         {toolbarConfig.map((item, index) => (
           <Toggle
@@ -217,7 +217,7 @@ export const Toolbar = ({ editor, isImageSelected, isVideoSelected }: Props) => 
               text-text
               hover:bg-background-dark
               hover:text-primary
-              transition duration-200 
+              transition
               bg-transparent
               ${(isImageSelected || isVideoSelected) ? 'opacity-50 cursor-not-allowed' : ''}
             `}
@@ -227,7 +227,7 @@ export const Toolbar = ({ editor, isImageSelected, isVideoSelected }: Props) => 
         ))}
       </div>
       <div
-        className="space-y-2 overflow-hidden transition-all duration-300 ease-in-out px-2"
+        className="space-y-2 overflow-hidden transition-all px-2"
         style={{
           maxHeight: expandedItem || isImageSelected || isVideoSelected ? "50px" : "0",
           opacity: expandedItem || isImageSelected || isVideoSelected ? 1 : 0,

@@ -10,7 +10,7 @@ const HTMLEditor: React.FC<HTMLEditorProps> = ({ content, onChange }) => {
     <textarea
       value={content}
       onChange={(e) => onChange(e.target.value)}
-      className={`w-full h-[500px] p-4 bg-background text-text border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-primary font-mono text-sm`}
+      className={`w-full h-[500px] p-4 bg-background text-text rounded-md border border-border/20 hover:border-border focus-within:border-border transition-colors focus:outline-none font-mono text-sm`}
     />
   );
 };

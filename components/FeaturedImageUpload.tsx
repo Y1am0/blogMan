@@ -96,8 +96,8 @@ const FeaturedImageUpload: React.FC<FeaturedImageUploadProps> = ({ onImageUpload
     <div className="mb-6">
       <div 
         {...getRootProps()} 
-        className={`border hover:border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors relative overflow-hidden
-          ${isDragActive ? 'border-primary bg-primary/10' : 'border-border'}
+        className={`border hover:border-dashed hover:border-border rounded-lg p-4 text-center cursor-pointer transition-colors relative overflow-hidden
+          ${isDragActive ? 'border-primary bg-primary/10' : 'border-border/20'}
           ${image ? 'bg-background' : 'bg-background'}
           ${error ? 'border-error' : ''}
           ${image ? 'h-[200px]' : 'h-auto'}

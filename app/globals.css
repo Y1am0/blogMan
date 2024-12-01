@@ -3,22 +3,36 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: 250 255 0;
-  --color-primary-dark: 204 204 0;
-  --color-background: 51 51 51;
-  --color-background-dark: 26 26 26;
-  --color-background-darkest: 12 12 12;
-  --color-text: 255 255 255;
-  --color-text-muted: 128 128 128;
-  --color-border: 250 255 0;
-  --color-error: 255 0 0;
-  --color-success: 0 255 0;
-  --color-warning: 255 165 0;
+  --color-primary: 5 0 255; /*#0500FF*/
+  --color-primary-dark: 0 0 204; /*#0000CC*/
+  --color-background: 255 255 255; /*#FFFFFF*/
+  --color-background-dark: 240 240 240; /*#F0F0F0*/
+  --color-background-darkest: 230 230 230; /*#E6E6E6*/
+  --color-text: 10 10 10; /*#0A0A0A*/
+  --color-text-muted: 100 100 100; /*#646464*/
+  --color-border: 200 200 200; /*#C8C8C8*/
+  --color-error: 220 38 38; /*#DC2626*/
+  --color-success: 22 163 74; /*#16A34A*/
+  --color-warning: 234 179 8; /*#EAB308*/
+}
+
+.dark {
+  --color-primary: 250 255 0; /*#FAFF00*/
+  --color-primary-dark: 204 204 0; /*#CCCC00*/
+  --color-background: 10 10 10; /*#0A0A0A*/
+  --color-background-dark: 20 20 20; /*#141414*/
+  --color-background-darkest: 30 30 30; /*#1E1E1E*/
+  --color-text: 255 255 255; /*#FFFFFF*/
+  --color-text-muted: 160 160 160; /*#A0A0A0*/
+  --color-border: 50 50 50; /*#323232*/
+  --color-error: 248 113 113; /*#F87171*/
+  --color-success: 34 197 94; /*#22C55E*/
+  --color-warning: 250 204 21; /*#FACC15*/
 }
 
 @layer base {
   body {
-    @apply bg-[#333333] text-white;
+    @apply bg-background text-text;
   }
 }
 
@@ -31,12 +45,13 @@ input[type="range"]::-moz-range-thumb {
   background: var(--color-primary);
 }
 
-button:focus, button:focus-visible {
+button:focus,
+button:focus-visible {
   @apply outline-none ring-0;
 }
 
 .tiptap p.is-editor-empty:first-child::before {
-  color: #FFFFFF50;
+  color: #ffffff50;
   font-size: 14px;
   content: attr(data-placeholder);
   float: left;
@@ -49,11 +64,11 @@ button:focus, button:focus-visible {
 }
 
 .ProseMirror ul {
-  @apply list-disc pl-5 text-white;
+  @apply list-disc pl-5 text-text;
 }
 
 .ProseMirror ol {
-  @apply list-decimal pl-5 text-white;
+  @apply list-decimal pl-5 text-text;
 }
 
 .ProseMirror pre {

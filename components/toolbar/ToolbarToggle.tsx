@@ -21,7 +21,7 @@ const MyComponent = () => {
           text-[${colors.text}] 
           hover:bg-[${colors.backgroundDark}] 
           hover:text-[${colors.primary}] 
-          transition duration-200 
+          transition
           bg-transparent
           ${pressed ? `bg-[${colors.primary}] text-[${colors.background}]` : ''}
         `}

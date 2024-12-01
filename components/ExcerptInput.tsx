@@ -23,7 +23,7 @@ const ExcerptInput: React.FC<ExcerptInputProps> = ({ value, onChange, maxLength 
         onChange={(e) => onChange(e.target.value.slice(0, maxLength))}
         placeholder={`Enter excerpt (max ${maxLength} characters)`}
         maxLength={maxLength}
-        className={`w-full bg-background text-text border-border focus:border-primary focus-visible:ring-0 focus-visible:ring-offset-0 mt-1 ${error ? 'border-error' : ''}`}
+        className={`w-full bg-background text-text border-border/20 hover:border-border focus:border-border transition-colors focus-visible:ring-0 focus-visible:ring-offset-0 mt-1 ${error ? 'border-error' : ''}`}
       />
       <div className="flex justify-between mt-1">
         <p className="text-sm text-text-muted">{value.length}/{maxLength} characters</p>

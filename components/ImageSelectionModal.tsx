@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import { getUploadedImages } from '@/lib/github'
+import SkeletonImageGrid from './SkeletonImageGrid'
 
 interface ImageSelectionModalProps {
   isOpen: boolean
@@ -42,20 +43,18 @@ const ImageSelectionModal: React.FC<ImageSelectionModalProps> = ({ isOpen, onClo
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="sm:max-w-[800px] h-[680px] flex flex-col border-border">
         <DialogHeader>
           <DialogTitle>Select an Image</DialogTitle>
         </DialogHeader>
-        {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <p>Loading images...</p>
-          </div>
-        ) : images.length === 0 ? (
-          <div className="flex justify-center items-center h-64">
-            <p>No images found in the upload directory.</p>
-          </div>
-        ) : (
-          <>
+        <div className="flex-grow overflow-y-auto p-4">
+          {loading ? (
+            <SkeletonImageGrid count={imagesPerPage} />
+          ) : images.length === 0 ? (
+            <div className="flex justify-center items-center h-full">
+              <p>No images found in the upload directory.</p>
+            </div>
+          ) : (
             <div className="grid grid-cols-3 gap-4">
               {currentImages.map((imageUrl, index) => (
                 <div key={index} className="relative aspect-square">
@@ -69,25 +68,27 @@ const ImageSelectionModal: React.FC<ImageSelectionModalProps> = ({ isOpen, onClo
                 </div>
               ))}
             </div>
-            <div className="flex justify-between items-center mt-4">
-              <Button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              >
-                <ChevronLeft className="mr-2 h-4 w-4" /> Previous
-              </Button>
-              <span>
-                Page {currentPage} of {totalPages}
-              </span>
-              <Button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-              >
-                Next <ChevronRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-          </>
-        )}
+          )}
+        </div>
+        <div className="flex justify-between items-center p-4">
+          <Button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className='bg-background-darkest text-text hover:bg-background-dark'
+          >
+            <ChevronLeft className="mr-2 h-4 w-4" /> Previous
+          </Button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className='bg-background-darkest text-text hover:bg-background-dark'
+          >
+            Next <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   )

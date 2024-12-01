@@ -37,7 +37,7 @@ const TitleAndSlugInput: React.FC<TitleAndSlugInputProps> = ({
           placeholder="Post title"
           value={title}
           onChange={handleTitleChange}
-          className={`w-full bg-background text-text border-border focus:border-primary focus-visible:ring-0 focus-visible:ring-offset-0 ${titleError ? 'border-error' : ''}`}
+          className={`w-full bg-background text-text border border-border/20 hover:border-border focus:border-border transition-colors focus-visible:ring-0 focus-visible:ring-offset-0 ${titleError ? 'border-error' : ''}`}
         />
         {titleError && (
           <div className="flex items-center space-x-1 mt-1">
@@ -56,7 +56,7 @@ const TitleAndSlugInput: React.FC<TitleAndSlugInputProps> = ({
             onChange={handleSlugChange}
             onBlur={handleSlugBlur}
             disabled={isSlugLocked}
-            className={`w-full bg-background text-text border-border focus:border-primary focus-visible:ring-0 focus-visible:ring-offset-0 pr-20 ${slugError ? 'border-error' : ''}`}
+            className={`w-full bg-background text-text border-border/20 focus:border-border transition-colors focus-visible:ring-0 focus-visible:ring-offset-0 pr-20 ${slugError ? 'border-error' : ''}`}
           />
           <div className="absolute right-2 flex space-x-2">
             <button
@@ -77,7 +77,7 @@ const TitleAndSlugInput: React.FC<TitleAndSlugInputProps> = ({
                   <Link size={16} />
                 </button>
               </PopoverTrigger>
-              <PopoverContent className="m-4 bg-background-darkest/90 text-text border-border">
+              <PopoverContent className="m-4 bg-background-darkest/60 backdrop-blur-sm text-text border-border">
                 <p className="text-sm font-medium">Preview URL:</p>
                 {slug ? (
                   <p className="text-sm text-primary break-all">{blogUrl}</p>

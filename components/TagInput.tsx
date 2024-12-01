@@ -36,14 +36,14 @@ const TagInput: React.FC<TagInputProps> = ({ id, tags, setTags, placeholder }) =
   };
 
   return (
-    <div className={`bg-background focus-within:border-transparent rounded-md p-2 flex flex-wrap items-center transition-colors duration-200`}>
+    <div className={`bg-background border border-border/20 hover:border-border focus-within:border-border rounded-md p-2 flex flex-wrap items-center transition-colors duration-200`}>
       {tags.map(tag => (
         <div key={tag} className={`bg-primary text-background px-2 py-1 rounded-md m-1 flex items-center`}>
           <span>{tag}</span>
           <button
             type="button"
             onClick={() => removeTag(tag)}
-            className={`ml-2 text-background hover:text-text transition-colors`}
+            className={`ml-2 text-background hover:text-background-darkest transition-colors`}
           >
             <X size={14} />
           </button>

@@ -170,7 +170,7 @@ const Tiptap = ({
             content,
             editorProps: {
                 attributes: {
-                    class: `h-[500px] bg-background text-text focus:outline-none p-4 [&_img]:my-4 [&_iframe]:my-4 overflow-y-auto`
+                    class: `h-[500px] transition bg-background text-text focus:outline-none p-4 [&_img]:my-4 [&_iframe]:my-4 overflow-y-auto`
                 },
             },
             onUpdate({ editor }) {
@@ -205,8 +205,8 @@ const Tiptap = ({
             };
         }, [editor]);
 
-        const editorContainerClasses = `mt-2 flex-grow overflow-hidden rounded-md border border-border ${
-            isImageSelected || isVideoSelected ? '' : `focus-within:border-primary focus-within:ring-1 focus-within:ring-primary`
+        const editorContainerClasses = `mt-2 flex-grow overflow-hidden rounded-md ${
+            isImageSelected || isVideoSelected ? '' : `border border-border/20 hover:border-border focus-within:border-border transition`
         }`;
 
         return (

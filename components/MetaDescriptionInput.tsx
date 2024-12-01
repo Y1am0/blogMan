@@ -21,7 +21,7 @@ const MetaDescriptionInput: React.FC<MetaDescriptionInputProps> = ({ value, onCh
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Enter meta description"
-        className={`w-full bg-background text-text border-border focus:border-primary focus-visible:ring-0 focus-visible:ring-offset-0 mt-1 ${error ? 'border-error' : ''}`}
+        className={`w-full bg-background text-text border-border/20 hover:border-border focus:border-border transition-colors focus-visible:ring-0 focus-visible:ring-offset-0 mt-1 ${error ? 'border-error' : ''}`}
       />
       {error && (
         <div className="flex items-center space-x-1 mt-1">

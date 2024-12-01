@@ -62,7 +62,7 @@ export function EditorSidebar({
                 id="publishDate"
                 variant="outline"
                 className={cn(
-                  "w-full justify-start text-left font-normal bg-background text-text border-border hover:bg-background-dark hover:text-text",
+                  "w-full justify-start text-left font-normal bg-background text-text border-border/20 hover:border-border focus:border-border hover:bg-background-dark hover:text-text",
                   !publishDate && "text-muted-foreground"
                 )}
               >
@@ -70,7 +70,7 @@ export function EditorSidebar({
                 <p className='text-text-muted'>{publishDate ? format(publishDate, "PPP") : <span>Pick a date</span>}</p>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="center">
+            <PopoverContent className="w-auto p-0 border border-border/20" align="center">
               <Calendar
                 mode="single"
                 selected={publishDate}
@@ -122,10 +122,10 @@ export function EditorSidebar({
         )}
         {formState?.message && !formState.errors && (
           <div className="mt-4 p-4 rounded-md border border-success bg-success/10 flex items-start space-x-2">
-            <CheckCircle2 className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+            <CheckCircle2 className="w-5 h-5 text-text flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-semibold text-success">Submission successful</p>
-              <p className="text-sm text-success/80 mt-1">{formState.message}</p>
+              <p className="font-semibold text-text">Submission successful</p>
+              <p className="text-sm text-text/80 mt-1">{formState.message}</p>
             </div>
           </div>
         )}
