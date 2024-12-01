@@ -1,0 +1,16 @@
+{
+  "title": "This is a blog post haha",
+  "slug": "this-is-a-blog-post-haha-2",
+  "content": "<h1 class=\"font-bold\">This is a title</h1><p></p><p><strong>GOOGLE</strong></p><p></p><blockquote class=\"border-l-4 pl-2 italic m-2\"><p>This is a quote</p></blockquote><pre><code>console.log('gamw ton menio')</code></pre><p><br><img src=\"https://gratisography.com/wp-content/uploads/2023/05/gratisography-luminescent-flower-free-stock-photo-1170x780.jpg\" width=\"596\" height=\"397\"></p>",
+  "publishDate": "2024-12-01T19:16:55.456Z",
+  "tags": [
+    "menios"
+  ],
+  "keywords": [
+    "key"
+  ],
+  "metaDescription": "",
+  "excerpt": "This is a title GOOGLE This is a quote console.log('gamw ton menio')",
+  "featuredImage": "https://raw.githubusercontent.com/Y1am0/blogMan/content/uploads/1733022070292-b7c3df9c9f15cabb72c1f2a9f404fc3f.png",
+  "lastModified": "2024-12-01T19:20:46.697Z"
+}
