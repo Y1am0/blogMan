@@ -14,6 +14,7 @@ interface TitleAndSlugInputProps {
   handleSlugBlur: () => void
   titleError?: string | null
   slugError?: string | null
+  isEditing: boolean
 }
 
 const TitleAndSlugInput: React.FC<TitleAndSlugInputProps> = ({
@@ -27,6 +28,7 @@ const TitleAndSlugInput: React.FC<TitleAndSlugInputProps> = ({
   handleSlugBlur,
   titleError,
   slugError,
+  isEditing
 }) => {
   return (
     <div className="space-y-4">
@@ -77,7 +79,7 @@ const TitleAndSlugInput: React.FC<TitleAndSlugInputProps> = ({
                   <Link size={16} />
                 </button>
               </PopoverTrigger>
-              <PopoverContent className="m-4 bg-background-darkest/60 backdrop-blur-sm text-text border-border">
+              <PopoverContent className="m-4 bg-background-darkest/90 text-text border-border">
                 <p className="text-sm font-medium">Preview URL:</p>
                 {slug ? (
                   <p className="text-sm text-primary break-all">{blogUrl}</p>

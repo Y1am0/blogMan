@@ -1,16 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getUploadedImages, deleteImage } from '@/lib/github'
+import { getUploadedImages, deleteImage, ImageData } from '@/lib/github'
 import { useToast } from "@/hooks/use-toast"
 import MediaGrid from '@/components/MediaGrid'
 import ImagePreviewModal from '@/components/ImagePreviewModal'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
-
-interface ImageData {
-  url: string;
-  path: string;
-}
 
 export default function MediaPage() {
   const [images, setImages] = useState<ImageData[]>([])

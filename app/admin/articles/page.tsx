@@ -1,12 +1,12 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { getArticles, deleteArticle } from '@/lib/github'
 import ArticleList from '@/components/ArticleList'
 import ArticleFilters from '@/components/ArticleFilters'
 import { useToast } from "@/hooks/use-toast"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
-import Fuse from 'fuse.js'
+import { useRouter } from 'next/navigation'
 
 export default function ArticlesPage() {
   const [articles, setArticles] = useState<Article[]>([])
@@ -16,6 +16,7 @@ export default function ArticlesPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [sortOrder, setSortOrder] = useState<'date-desc' | 'date-asc'>('date-desc')
   const { toast } = useToast()
+  const router = useRouter()
 
   useEffect(() => {
     fetchArticles()
@@ -23,6 +24,7 @@ export default function ArticlesPage() {
 
   async function fetchArticles() {
     try {
+      setLoading(true)
       const fetchedArticles = await getArticles()
       setArticles(fetchedArticles)
       setFilteredArticles(fetchedArticles)
@@ -38,20 +40,16 @@ export default function ArticlesPage() {
     }
   }
 
-  const fuse = useMemo(() => new Fuse(articles, {
-    keys: ['title', 'tags', 'keywords'],
-    threshold: 0.4,
-    includeMatches: true,
-    useExtendedSearch: true,
-  }), [articles])
-
   useEffect(() => {
     let result = [...articles]
 
     // Apply search
     if (searchTerm) {
-      const searchResults = fuse.search(searchTerm)
-      result = searchResults.map(r => r.item)
+      result = result.filter(article =>
+        article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        article.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        article.keywords.some(keyword => keyword.toLowerCase().includes(searchTerm.toLowerCase()))
+      )
     }
 
     // Apply sorting
@@ -62,7 +60,7 @@ export default function ArticlesPage() {
     })
 
     setFilteredArticles(result)
-  }, [articles, searchTerm, sortOrder, fuse])
+  }, [articles, searchTerm, sortOrder])
 
   const handleSearchChange = (value: string) => {
     setSearchTerm(value)

@@ -7,9 +7,10 @@ import { useEffect, useState } from 'react'
 
 interface ThemeToggleProps {
   compact?: boolean
+  className?: string
 }
 
-export function ThemeToggle({ compact = false }: ThemeToggleProps) {
+export function ThemeToggle({ compact = false, className }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
@@ -25,9 +26,10 @@ export function ThemeToggle({ compact = false }: ThemeToggleProps) {
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
       className={cn(
-        "flex items-center h-9 px-2 rounded-md transition-colors w-full",
-        "text-text hover:text-primary hover:bg-primary/5"
+        "flex items-center transition-colors",
+        className
       )}
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
     >
       {theme === 'dark' ? (
         <Sun className="w-4 h-4 flex-shrink-0" />
@@ -35,7 +37,7 @@ export function ThemeToggle({ compact = false }: ThemeToggleProps) {
         <Moon className="w-4 h-4 flex-shrink-0" />
       )}
       <span className={cn(
-        "ml-2 whitespace-nowrap",
+        "ml-2 transition-all duration-300 ease-in-out whitespace-nowrap",
         compact ? "opacity-0 w-0" : "opacity-100 w-auto"
       )}>
         {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}

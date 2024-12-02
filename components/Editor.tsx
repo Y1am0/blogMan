@@ -10,6 +10,8 @@ import { EditorSidebar } from './EditorSidebar'
 import MetaDescriptionInput from './MetaDescriptionInput'
 import ExcerptInput from './ExcerptInput'
 import { AlertCircle } from 'lucide-react'
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 
 interface EditorProps {
   initialData?: Article
@@ -40,8 +42,13 @@ export default function Editor({ initialData }: EditorProps) {
     handleSlugChange,
     toggleSlugLock,
     handleSlugBlur,
+    handleContentChange,
     handleSubmit,
-    initializeForm
+    initializeForm,
+    originalSlug,
+    isEditing,
+    shouldUpdateExcerpt,
+    toggleExcerptUpdate
   } = useEditorForm(initialData)
 
   const { errors, setError, clearError, clearAllErrors, setErrors } = useFormErrors();
@@ -78,8 +85,8 @@ export default function Editor({ initialData }: EditorProps) {
     clearError('featuredImage');
   };
 
-  const handleContentChange = (newContent: string) => {
-    setContent(newContent);
+  const handleContentChangeWithErrorClearing = (newContent: string) => {
+    handleContentChange(newContent);
     if (newContent.trim().length >= 10) {
       clearError('content');
     }
@@ -113,6 +120,7 @@ export default function Editor({ initialData }: EditorProps) {
         action={handleSubmit}
         className="flex flex-col w-full h-full space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4"
       >
+        <input type="hidden" name="originalSlug" value={originalSlug} />
         <div className="lg:w-2/3 space-y-4">
           <TitleAndSlugInput
             title={title}
@@ -125,13 +133,14 @@ export default function Editor({ initialData }: EditorProps) {
             handleSlugBlur={handleSlugBlur}
             titleError={errors.title || null}
             slugError={errors.slug || null}
+            isEditing={isEditing}
           />
           <div>
             <ContentEditor
               content={content}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
-              onChange={handleContentChange}
+              onChange={handleContentChangeWithErrorClearing}
             />
             {errors.content && (
               <div className="flex items-center space-x-1 mt-2">
@@ -151,6 +160,14 @@ export default function Editor({ initialData }: EditorProps) {
               }}
               error={errors.metaDescription || null}
             />
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="auto-update-excerpt"
+                checked={shouldUpdateExcerpt}
+                onCheckedChange={toggleExcerptUpdate}
+              />
+              <Label htmlFor="auto-update-excerpt">Auto-update excerpt</Label>
+            </div>
             <ExcerptInput
               value={excerpt}
               onChange={handleExcerptChange}

@@ -17,8 +17,16 @@ function slugify(text: string) {
 function extractExcerpt(content: string, maxLength: number = 120): string {
   const div = document.createElement('div');
   div.innerHTML = content;
-  let text = div.textContent || div.innerText || '';
-  text = text.replace(/\s+/g, ' ').trim();
+  
+  // Replace block-level elements with their text content followed by a space
+  const text = div.innerHTML
+    .replace(/<\/?(p|div|h[1-6]|ul|ol|li|blockquote)[^>]*>/gi, '\n') // Replace block elements with newlines
+    .replace(/<br\s*\/?>/gi, '\n') // Replace <br> tags with newlines
+    .replace(/<[^>]+>/g, '') // Remove any remaining HTML tags
+    .replace(/\n+/g, ' ') // Replace multiple newlines with a single space
+    .replace(/\s+/g, ' ') // Replace multiple spaces with a single space
+    .trim();
+
   return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
 }
 
@@ -29,6 +37,7 @@ export function useEditorForm(initialData?: Article) {
   });
   const [title, setTitle] = useState(initialData?.title || '')
   const [slug, setSlug] = useState(initialData?.slug || '')
+  const [originalSlug, setOriginalSlug] = useState(initialData?.slug || '')
   const [isSlugLocked, setIsSlugLocked] = useState(true)
   const [blogUrl, setBlogUrl] = useState('')
   const [content, setContent] = useState(initialData?.content || '')
@@ -38,12 +47,14 @@ export function useEditorForm(initialData?: Article) {
   const [metaDescription, setMetaDescription] = useState(initialData?.metaDescription || '')
   const [excerpt, setExcerpt] = useState(initialData?.excerpt || '')
   const [featuredImage, setFeaturedImage] = useState(initialData?.featuredImage || '')
+  const [isEditing] = useState(!!initialData)
+  const [shouldUpdateExcerpt, setShouldUpdateExcerpt] = useState(true)
 
   useEffect(() => {
-    if (isSlugLocked) {
+    if (isSlugLocked && !isEditing) {
       setSlug(slugify(title))
     }
-  }, [title, isSlugLocked])
+  }, [title, isSlugLocked, isEditing])
 
   useEffect(() => {
     const currentUrl = window.location.origin
@@ -51,14 +62,17 @@ export function useEditorForm(initialData?: Article) {
   }, [slug])
 
   useEffect(() => {
-    if (!initialData) {
+    if (shouldUpdateExcerpt) {
       const newExcerpt = extractExcerpt(content);
       setExcerpt(newExcerpt);
     }
-  }, [content, initialData])
+  }, [content, shouldUpdateExcerpt])
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
+    if (isSlugLocked && !isEditing) {
+      setSlug(slugify(e.target.value))
+    }
   }
 
   const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,6 +88,14 @@ export function useEditorForm(initialData?: Article) {
     setSlug(slugify(slug))
   }
 
+  const handleContentChange = (newContent: string) => {
+    setContent(newContent)
+  }
+
+  const toggleExcerptUpdate = () => {
+    setShouldUpdateExcerpt(!shouldUpdateExcerpt)
+  }
+
   const handleSubmit = async () => {
     const formData = {
       title,
@@ -84,7 +106,8 @@ export function useEditorForm(initialData?: Article) {
       keywords,
       metaDescription,
       excerpt,
-      featuredImage
+      featuredImage,
+      originalSlug: isEditing ? originalSlug : undefined
     };
     return formAction(formData);
   };
@@ -92,6 +115,7 @@ export function useEditorForm(initialData?: Article) {
   const initializeForm = useCallback((data: Article) => {
     setTitle(data.title);
     setSlug(data.slug);
+    setOriginalSlug(data.slug);
     setContent(data.content);
     setPublishDate(new Date(data.publishDate));
     setTags(data.tags);
@@ -99,6 +123,8 @@ export function useEditorForm(initialData?: Article) {
     setMetaDescription(data.metaDescription);
     setExcerpt(data.excerpt);
     setFeaturedImage(data.featuredImage);
+    setIsSlugLocked(true);
+    setShouldUpdateExcerpt(true);
   }, []);
 
   return {
@@ -127,10 +153,15 @@ export function useEditorForm(initialData?: Article) {
     handleSlugChange,
     toggleSlugLock,
     handleSlugBlur,
+    handleContentChange,
     handleSubmit,
     featuredImage,
     setFeaturedImage,
-    initializeForm
+    initializeForm,
+    originalSlug,
+    isEditing,
+    shouldUpdateExcerpt,
+    toggleExcerptUpdate
   }
 }
 

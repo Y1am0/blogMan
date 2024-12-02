@@ -1,7 +1,7 @@
 'use server'
 
 import { formSchema } from '@/lib/formSchema';
-import { createOrUpdateFile } from '@/lib/github';
+import { createOrUpdateFile, deleteArticle } from '@/lib/github';
 
 export async function submitForm(prevState: any, formData: any): Promise<{ message: string; errors?: { [key: string]: string[] } }> {
   try {
@@ -30,14 +30,22 @@ export async function submitForm(prevState: any, formData: any): Promise<{ messa
       lastModified: new Date().toISOString(),
     }, null, 2);
 
+    // Check if we're editing an existing article
+    const isEditing = formData.originalSlug && formData.originalSlug !== slug;
+
+    // If editing and slug has changed, delete the old file
+    if (isEditing) {
+      await deleteArticle(formData.originalSlug);
+    }
+
     // Push to GitHub
     const filePath = `articles/${slug}.json`;
-    const commitMessage = `Add/Update blog post: ${title}`;
+    const commitMessage = isEditing ? `Update blog post: ${title}` : `Add blog post: ${title}`;
     const success = await createOrUpdateFile(filePath, jsonContent, commitMessage);
 
     if (success) {
       return {
-        message: 'Your blog post was successfully created and pushed to GitHub!',
+        message: isEditing ? 'Your blog post was successfully updated and pushed to GitHub!' : 'Your blog post was successfully created and pushed to GitHub!',
       };
     } else {
       return {

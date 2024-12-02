@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react'
 
-
 const SelectedVideo: React.FC<NodeViewProps> = ({ node, selected, getPos, editor }) => {
   const [isSelected, setIsSelected] = useState(selected);
   const [width, setWidth] = useState(node.attrs.width);
@@ -61,7 +60,13 @@ const SelectedVideo: React.FC<NodeViewProps> = ({ node, selected, getPos, editor
     };
   }, [node.attrs.width, node.attrs.height]);
 
-  const videoId = node.attrs.src.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})/)?.[1];
+  const getVideoId = (url: string) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  const videoId = getVideoId(node.attrs.src);
 
   return (
     <NodeViewWrapper className="relative inline-block w-full" ref={containerRef}>
@@ -76,7 +81,7 @@ const SelectedVideo: React.FC<NodeViewProps> = ({ node, selected, getPos, editor
         <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
           {videoId ? (
             <iframe
-              src={`https://www.youtube.com/embed/${videoId}`}
+              src={`https://www.youtube-nocookie.com/embed/${videoId}`}
               width={width}
               height={height}
               style={{
@@ -114,4 +119,3 @@ const SelectedVideo: React.FC<NodeViewProps> = ({ node, selected, getPos, editor
 };
 
 export default SelectedVideo;
-
