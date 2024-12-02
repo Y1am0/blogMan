@@ -1,7 +1,7 @@
 {
   "title": "this is a nice little test on here but not slug",
   "slug": "this-is-a-nice-little-test-on-the-title",
-  "content": "<p>another one here edited?!? :) !!</p>",
+  "content": "<p>another one here edited?!? :) !! ???</p>",
   "publishDate": "2024-12-02T14:11:11.207Z",
   "tags": [
     "taggerino"
@@ -10,5 +10,5 @@
   "metaDescription": "",
   "excerpt": "another one here",
   "featuredImage": "https://raw.githubusercontent.com/Y1am0/blogMan/content/uploads/1732926993226-456486589_8571677929510911_3194036275115946619_n.jpg",
-  "lastModified": "2024-12-02T16:55:10.285Z"
+  "lastModified": "2024-12-02T16:58:28.517Z"
 }
