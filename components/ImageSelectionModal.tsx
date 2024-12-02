@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
-import { getUploadedImages } from '@/lib/github'
+import { getUploadedImages, ImageData } from '@/lib/github'
 import SkeletonImageGrid from './SkeletonImageGrid'
 
 interface ImageSelectionModalProps {
@@ -18,7 +18,7 @@ interface ImageSelectionModalProps {
 }
 
 const ImageSelectionModal: React.FC<ImageSelectionModalProps> = ({ isOpen, onClose, onSelectImage }) => {
-  const [images, setImages] = useState<string[]>([])
+  const [images, setImages] = useState<ImageData[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(true)
   const imagesPerPage = 6
@@ -56,14 +56,14 @@ const ImageSelectionModal: React.FC<ImageSelectionModalProps> = ({ isOpen, onClo
             </div>
           ) : (
             <div className="grid grid-cols-3 gap-4">
-              {currentImages.map((imageUrl, index) => (
+              {currentImages.map((image, index) => (
                 <div key={index} className="relative aspect-square">
                   <Image
-                    src={imageUrl}
+                    src={image.url}
                     alt={`Uploaded image ${index + 1}`}
                     fill
                     className="object-cover rounded-md cursor-pointer"
-                    onClick={() => onSelectImage(imageUrl)}
+                    onClick={() => onSelectImage(image.url)}
                   />
                 </div>
               ))}
