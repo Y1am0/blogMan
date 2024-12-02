@@ -11,7 +11,11 @@ import MetaDescriptionInput from './MetaDescriptionInput'
 import ExcerptInput from './ExcerptInput'
 import { AlertCircle } from 'lucide-react'
 
-export default function Editor() {
+interface EditorProps {
+  initialData?: Article
+}
+
+export default function Editor({ initialData }: EditorProps) {
   const {
     state,
     title,
@@ -36,13 +40,20 @@ export default function Editor() {
     handleSlugChange,
     toggleSlugLock,
     handleSlugBlur,
-    handleSubmit
-  } = useEditorForm()
+    handleSubmit,
+    initializeForm
+  } = useEditorForm(initialData)
 
   const { errors, setError, clearError, clearAllErrors, setErrors } = useFormErrors();
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [activeTab, setActiveTab] = useState('visual')
+
+  useEffect(() => {
+    if (initialData) {
+      initializeForm(initialData)
+    }
+  }, [initialData, initializeForm])
 
   useEffect(() => {
     if (state.errors) {
@@ -85,7 +96,7 @@ export default function Editor() {
     handleTitleChange(e);
     if (e.target.value.length >= 5) {
       clearError('title');
-      clearError('slug'); // Clear slug error when title error is cleared
+      clearError('slug');
     }
   };
 

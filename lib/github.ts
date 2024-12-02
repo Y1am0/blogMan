@@ -311,3 +311,53 @@ export async function deleteImage(path: string): Promise<boolean> {
   }
 }
 
+export async function getArticleBySlug(slug: string): Promise<Article | null> {
+  if (!isGithubConfigured) {
+    console.warn('GitHub is not configured. Returning simulated article data.');
+    return {
+      title: 'Sample Article',
+      slug: slug,
+      content: '<p>This is the full content of the sample article...</p>',
+      publishDate: '2023-05-01T00:00:00Z',
+      featuredImage: 'https://example.com/image.jpg',
+      tags: ['sample', 'article'],
+      keywords: ['sample', 'article', 'content'],
+      metaDescription: 'This is a meta description for the sample article',
+      excerpt: 'This is a sample excerpt for the article...',
+      lastModified: '2023-05-01T12:00:00Z',
+    };
+  }
+
+  try {
+    const filePath = `articles/${slug}.json`;
+    const { data: fileData } = await octokit!.repos.getContent({
+      owner: owner!,
+      repo: repo!,
+      path: filePath,
+      ref: branch,
+    });
+
+    if ('content' in fileData) {
+      const decodedContent = Buffer.from(fileData.content, 'base64').toString('utf-8');
+      const articleData = JSON.parse(decodedContent);
+      return {
+        title: articleData.title,
+        slug: articleData.slug,
+        content: articleData.content,
+        publishDate: articleData.publishDate,
+        featuredImage: articleData.featuredImage,
+        tags: articleData.tags || [],
+        keywords: articleData.keywords || [],
+        metaDescription: articleData.metaDescription || '',
+        excerpt: articleData.excerpt || 'No excerpt available.',
+        lastModified: articleData.lastModified || articleData.publishDate,
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Error fetching article:', error);
+    return null;
+  }
+}
+

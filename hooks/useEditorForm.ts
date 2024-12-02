@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useFormState } from 'react-dom'
 import { submitForm } from '@/app/actions/actions'
 
@@ -7,37 +7,37 @@ function slugify(text: string) {
     .toString()
     .toLowerCase()
     .trim()
-    .replace(/\s+/g, '-')     // Replace spaces with -
-    .replace(/[^\w\-]+/g, '') // Remove all non-word chars
-    .replace(/\-\-+/g, '-')   // Replace multiple - with single -
-    .replace(/^-+/, '')       // Trim - from start of text
-    .replace(/-+$/, '');      // Trim - from end of text
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '');
 }
 
 function extractExcerpt(content: string, maxLength: number = 120): string {
   const div = document.createElement('div');
   div.innerHTML = content;
   let text = div.textContent || div.innerText || '';
-  text = text.replace(/\s+/g, ' ').trim(); // Replace all whitespace (including newlines) with a single space
+  text = text.replace(/\s+/g, ' ').trim();
   return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
 }
 
-export function useEditorForm() {
+export function useEditorForm(initialData?: Article) {
   const [state, formAction] = useFormState(submitForm, {
     message: '',
     errors: {} as { [key: string]: string[] }
   });
-  const [title, setTitle] = useState('')
-  const [slug, setSlug] = useState('')
+  const [title, setTitle] = useState(initialData?.title || '')
+  const [slug, setSlug] = useState(initialData?.slug || '')
   const [isSlugLocked, setIsSlugLocked] = useState(true)
   const [blogUrl, setBlogUrl] = useState('')
-  const [content, setContent] = useState('')
-  const [publishDate, setPublishDate] = useState<Date | undefined>(new Date())
-  const [tags, setTags] = useState<string[]>([])
-  const [keywords, setKeywords] = useState<string[]>([])
-  const [metaDescription, setMetaDescription] = useState('')
-  const [excerpt, setExcerpt] = useState('')
-  const [featuredImage, setFeaturedImage] = useState('')
+  const [content, setContent] = useState(initialData?.content || '')
+  const [publishDate, setPublishDate] = useState<Date | undefined>(initialData ? new Date(initialData.publishDate) : new Date())
+  const [tags, setTags] = useState<string[]>(initialData?.tags || [])
+  const [keywords, setKeywords] = useState<string[]>(initialData?.keywords || [])
+  const [metaDescription, setMetaDescription] = useState(initialData?.metaDescription || '')
+  const [excerpt, setExcerpt] = useState(initialData?.excerpt || '')
+  const [featuredImage, setFeaturedImage] = useState(initialData?.featuredImage || '')
 
   useEffect(() => {
     if (isSlugLocked) {
@@ -51,9 +51,11 @@ export function useEditorForm() {
   }, [slug])
 
   useEffect(() => {
-    const newExcerpt = extractExcerpt(content);
-    setExcerpt(newExcerpt);
-  }, [content])
+    if (!initialData) {
+      const newExcerpt = extractExcerpt(content);
+      setExcerpt(newExcerpt);
+    }
+  }, [content, initialData])
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
@@ -87,6 +89,18 @@ export function useEditorForm() {
     return formAction(formData);
   };
 
+  const initializeForm = useCallback((data: Article) => {
+    setTitle(data.title);
+    setSlug(data.slug);
+    setContent(data.content);
+    setPublishDate(new Date(data.publishDate));
+    setTags(data.tags);
+    setKeywords(data.keywords);
+    setMetaDescription(data.metaDescription);
+    setExcerpt(data.excerpt);
+    setFeaturedImage(data.featuredImage);
+  }, []);
+
   return {
     state,
     formAction,
@@ -115,7 +129,8 @@ export function useEditorForm() {
     handleSlugBlur,
     handleSubmit,
     featuredImage,
-    setFeaturedImage
+    setFeaturedImage,
+    initializeForm
   }
 }
 

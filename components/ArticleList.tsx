@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { format } from 'date-fns'
-import { Trash2 } from 'lucide-react'
+import { Trash2, Edit } from 'lucide-react'
 import { Button } from './ui/button'
 import ArticleThumbnail from './ArticleThumbnail'
 
@@ -43,7 +43,16 @@ const ArticleList: React.FC<ArticleListProps> = ({ articles, onDeleteArticle }) 
                 ))}
               </div>
             </div>
-            <div className="flex items-start ml-4">
+            <div className="flex items-start ml-4 space-x-2">
+              <Link href={`/admin/edit-post/${article.slug}`}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-primary hover:bg-primary/10 hover:text-primary"
+                >
+                  <Edit className="w-4 h-4" />
+                </Button>
+              </Link>
               <Button
                 variant="ghost"
                 size="sm"
